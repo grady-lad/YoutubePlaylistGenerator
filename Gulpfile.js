@@ -8,6 +8,12 @@ var uglify = require('gulp-uglify');
 var streamify = require('gulp-streamify');
 var nmon   = require('gulp-nodemon');
 var notify = require('gulp-notify');
+var sass   = require('gulp-sass');
+var autoprefixer = require('gulp-autoprefixer');
+var sassOptions = {
+  		errLogToConsole: true,
+  		outputStyle: 'expanded'
+	};
 
 // The task that handles both development and deployment
 var runBrowserifyTask = function (options) {
@@ -59,7 +65,20 @@ var runBrowserifyTask = function (options) {
 
 };
 
-gulp.task('default', function () {
+gulp.task('sassy' , function(){
+	console.log('compiling sass');
+ 	return gulp
+ 		.src('./dev/app/public/stylesheets/*scss')
+ 		.pipe(sass()).on('error', sass.logError)
+ 		.pipe(autoprefixer())
+ 		.pipe(gulp.dest('./build/stylesheets'))
+});
+
+gulp.task('watch', function(){
+    gulp.watch("./dev/app/public/stylesheets/*scss", ['sassy']);
+});
+
+gulp.task('default', ['sassy' , 'watch'] , function () {
 
 	runBrowserifyTask({
 		watch: true,
@@ -67,7 +86,6 @@ gulp.task('default', function () {
 		uglify: false
 	});
 	nmon({script: 'server.js'});
-
 });
 
 gulp.task('deploy', function () {
