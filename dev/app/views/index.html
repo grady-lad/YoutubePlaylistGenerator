@@ -1,7 +1,17 @@
-<div id="home">
-	<h1> Welcome to the YoutubePlaylist Generator</h1>
-  	<p id="eh"> Click the button below to upload a file :) </p>
-    <button id="createPlaylist">Click to Upload</button>
-    <div id="example"></div>
-    <div id="playlistContainer"></div>
+<div id="authorizationContainer">
+	<div id="loading">
+		<p id='loadingImg'> LOADING </p>
+	</div>
+	<section id="preAuth">
+		<h1> Welcome to the YoutubePlaylist Generator</h1>
+  		<p id="eh"> This website needs authorization from google to continue </p>
+    	<button id="authorize">Authorize</button>
+    	<div id="example"></div>
+    	<div id="playlistContainer"></div>
+	</section>
+	<section id="postAuth">
+		<p> To create a playlist you must export your bookmarks as a .html file </p>
+		<p> Please refer to these links below on how to do so</p>
+		<button id="createPlaylist">Upload file</button>
+	</section>
 </div>

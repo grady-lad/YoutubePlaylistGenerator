@@ -1,8 +1,39 @@
-body {
-	background-color: red;
+body{
+	width: 80%;
+    margin: 0 auto;	
+    text-align: center;
 }
 
-h1 {
-	
-	font-family: test;
+header {
+	background-color: #e52d27;
+	line-height: 1;
+	font-size: 42px;
+
+	h1 {
+	  color: white;
+	}
+}
+
+#authorizationContainer {
+	height: 200px;
+}
+
+#loading {
+	width: 100%;
+	display: block;
+	opacity: 0.7;
+	z-index: 99;
+}
+
+#loadingImg {
+	z-index: 100;
+	margin: auto 0;
+}
+
+#preAuth {
+  display: none;
+}
+
+#postAuth {
+	display: none;
 }

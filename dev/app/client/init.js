@@ -7,9 +7,9 @@
     to have a global function as an entry point which can talk to the external
     script, but need to figure out the gulpify process. Maybe it is wrapping a
     function around it and hiding it from the global space**/
+var InitAuth = require('./controllers/initAuth');
 setTimeout(function(){
   if(gapi){
-  	var InitAuth = require('./controllers/initAuth');
   	var auth = new InitAuth();
   	auth.googleApiClientReady();
   }
@@ -20,6 +20,17 @@ var React = require('react');
 var App = require('./hey');
 var PlaylistComponent = require('./PlaylistColView');
 console.log(App);
+
+$('#authorize').click(function(){
+  var auth = new InitAuth();
+  auth.handleAuthClick();
+  console.log('clickity click');
+});
+
+function checkAuth(){
+  console.log('checked');
+}
+
 $('#createPlaylist').click(function(){
 	$.ajax({
     	type:'POST',
