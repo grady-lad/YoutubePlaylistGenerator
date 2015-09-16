@@ -1,16 +1,17 @@
 body{
 	width: 80%;
     margin: 0 auto;	
-    text-align: center;
+    padding: 0;
+    width: 960px;
 }
 
 header {
 	background-color: #e52d27;
-	line-height: 1;
-	font-size: 42px;
+	font-size: 32px;
 
 	h1 {
 	  color: white;
+	  text-align: center;
 	}
 }
 

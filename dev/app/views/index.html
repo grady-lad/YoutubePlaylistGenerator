@@ -12,6 +12,9 @@
 	<section id="postAuth">
 		<p> To create a playlist you must export your bookmarks as a .html file </p>
 		<p> Please refer to these links below on how to do so</p>
-		<button id="createPlaylist">Upload file</button>
+		<form enctype="multipart/form-data">
+			<input type="file" id="file-select" name="playlists" accept="text/html"/>
+			<button type="submit" id="createPlaylist">Upload</button>
+		</form>
 	</section>
 </div>

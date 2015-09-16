@@ -1,7 +1,10 @@
+"use strict";
 var Uploader = function(playlistId, channelId){
   this.playlistId = playlistId;
   this.channelId = channelId;
 }
+
+var $ = require('jquery');
 
 // After the API loads, call a function to enable the playlist creation form.
 Uploader.prototype.handleAPILoaded = function() {

@@ -1,4 +1,8 @@
-function Auth(){
+"use strict";
+
+var $ = require('jquery');
+
+var Auth = function(){
   var clientId;
   var OAUTH2_SCOPES;
   this.getClientID = function(){
