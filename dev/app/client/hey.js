@@ -17,14 +17,17 @@ var playlistDivWrapper = React.createClass({
     		})(i);
     	}
   	},
-
+  	/**
+  	** //<input type="text" name="playlistName"></input>
+			//<button type ="button" onClick={this.handleClick}> Create! </button>
+  	**/
 	render: function(){
-		return <div>
-			<h1>Enter playlist name below</h1>
+		return <section className="playlistDiv">
+			<h2> Enter a name for your Playlist</h2>
 			<p>Please make sure the playlist name does not exist</p>
-			<input type="text" name="playlistName"></input>
-			<button type ="button" onClick={this.handleClick}> Create! </button>
-		</div>;
+			<input type="text" name="plName"/>
+	 		<button type="submit" id="create" className="playlistButton">Create Playlist</button>
+		</section>;
 	}
 });
 
@@ -33,13 +36,13 @@ var App = React.createClass({
 		var videos = this.props.videos;
 		console.log(videos);
 		return (
-			<ol>
+			<div>
 				{Object.keys(videos).map(function(val , index){
 					if(val !== 'total'){
 						return <playlistDivWrapper key={val} data={videos[val]}/>;
 					}
 				})}
-			</ol>
+			</div>
 		);
 	}
 

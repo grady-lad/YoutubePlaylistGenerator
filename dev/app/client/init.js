@@ -39,8 +39,9 @@
        contentType: false,
        processData: false,
        success:function(response) {
+        console.log('clicked');
         //var playlistAmount = Math.round((response.length / 200)); 	
-        //React.renderComponent(<App videos={response}/>, document.getElementById('example'));
+        React.renderComponent(<App videos={response}/>, document.getElementById('example'));
         //createPlaylistViews(response);
         console.log(response);
         },
