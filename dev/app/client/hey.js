@@ -5,18 +5,14 @@ var playlistDivWrapper = React.createClass({
 	
 	handleClick: function(event) {
 		var videos = this.props.data;
+		var count = 0;
 		var upload = new Uploader(this.state.value);
-		upload.createPlaylist();
-		//console.log(upload);
-    	/**for(var i=0; i <= videos.length; i++){
-    		(function(index){
-    			setTimeout(function() {    
-    			upload.addToPlaylist(videos[index]);
-    				//console.log("the index is " + index);
-            	//console.log(videos[y]);
-  				}, i * 500);
-    		})(i);
-    	}**/
+		console.log("we are creating " + videos.length + " videos in this playlist");
+		upload.createPlaylist().then(function(){
+			/** @params 1st video, the array, counter**/	 
+    		upload.addToPlaylist(videos[0] , videos , 0);	
+		});
+		
   	},
 
   	handleChange: function(event) {

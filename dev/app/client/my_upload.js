@@ -31,16 +31,20 @@ Uploader.prototype.createPlaylist = function() {
       }
     }
   });
-  request.execute(function(response) {
-    var result = response.result;
-    if (result) {
-      self.playlistId = result.id
-      console.log(self.playlistId);
-      console.log(result.snippet.title);
-      console.log(result.snippet.description);
-    } else {
+  return new Promise(function(resolve, reject){
+    request.execute(function(response) {
+      var result = response.result;
+      if (result) {
+        self.playlistId = result.id
+        console.log(result.id);
+        console.log(result.snippet.title);
+        console.log(result.snippet.description);
+        resolve();
+      } else {
       console.log('Could not create playlist');
-    }
+      reject();
+      }
+    });
   });
 }
 
@@ -52,7 +56,9 @@ Uploader.prototype.addVideoToPlaylist = function() {
 // Add a video to a playlist. The "startPos" and "endPos" values let you
 // start and stop the video at specific times when the video is played as
 // part of the playlist. However, these values are not set in this example.
-Uploader.prototype.addToPlaylist = function(id, startPos, endPos) {
+Uploader.prototype.addToPlaylist = function(id, videos, count) {
+  if(count < videos.length){
+  var self = this;
   var details = {
     videoId: id,
     kind: 'youtube#video'
@@ -61,13 +67,32 @@ Uploader.prototype.addToPlaylist = function(id, startPos, endPos) {
     part: 'snippet',
     resource: {
       snippet: {
-        playlistId: 'PLiZ5SOHHmiC-c4uAzO-Re_CR_CUYkupQn',
+        playlistId: self.playlistId,
         resourceId: details
       }
     }
   });
   request.execute(function(response) {
-    console.log(JSON.stringify(response.result));
+    if(response){
+      count++;
+      console.log(response);
+      self.addToPlaylist(videos[count] , videos, count);
+    }
   });
+  }else{
+    return;
+  }
 }
+
+Uploader.prototype.testy = function(){
+  var self = this;
+  for(var i=0; i <= 200; i++){
+    (function(index){
+      setTimeout(function() {      
+        console.log("testing the worker method");        
+      }, i * 500);
+    })(i);
+  }
+}
+
 module.exports = Uploader;
