@@ -1,7 +1,7 @@
 "use strict";
-var Uploader = function(playlistId, channelId){
-  this.playlistId = playlistId;
-  this.channelId = channelId;
+var Uploader = function(playlistTitle){
+  this.playlistTitle = playlistTitle;
+  this.playlistId = "";
 }
 
 var $ = require('jquery');
@@ -18,11 +18,12 @@ Uploader.prototype.enableForm = function() {
 
 // Create a private playlist.
 Uploader.prototype.createPlaylist = function() {
+  var self = this;
   var request = gapi.client.youtube.playlists.insert({
     part: 'snippet,status',
     resource: {
       snippet: {
-        title: 'Test Playlist',
+        title: this.playlistTitle,
         description: 'A private playlist created with the YouTube API'
       },
       status: {
@@ -33,12 +34,12 @@ Uploader.prototype.createPlaylist = function() {
   request.execute(function(response) {
     var result = response.result;
     if (result) {
-      playlistId = result.id;
-      $('#playlist-id').val(playlistId);
-      $('#playlist-title').html(result.snippet.title);
-      $('#playlist-description').html(result.snippet.description);
+      self.playlistId = result.id
+      console.log(self.playlistId);
+      console.log(result.snippet.title);
+      console.log(result.snippet.description);
     } else {
-      $('#status').html('Could not create playlist');
+      console.log('Could not create playlist');
     }
   });
 }
@@ -69,5 +70,4 @@ Uploader.prototype.addToPlaylist = function(id, startPos, endPos) {
     console.log(JSON.stringify(response.result));
   });
 }
-
 module.exports = Uploader;

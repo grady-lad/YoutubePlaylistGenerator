@@ -5,9 +5,10 @@ var playlistDivWrapper = React.createClass({
 	
 	handleClick: function(event) {
 		var videos = this.props.data;
-		var upload = new Uploader();
+		var upload = new Uploader(this.state.value);
+		upload.createPlaylist();
 		//console.log(upload);
-    	for(var i=0; i <= videos.length; i++){
+    	/**for(var i=0; i <= videos.length; i++){
     		(function(index){
     			setTimeout(function() {    
     			upload.addToPlaylist(videos[index]);
@@ -15,7 +16,11 @@ var playlistDivWrapper = React.createClass({
             	//console.log(videos[y]);
   				}, i * 500);
     		})(i);
-    	}
+    	}**/
+  	},
+
+  	handleChange: function(event) {
+    	this.setState({value: event.target.value});
   	},
   	/**
   	** //<input type="text" name="playlistName"></input>
@@ -25,8 +30,8 @@ var playlistDivWrapper = React.createClass({
 		return <section className="playlistDiv">
 			<h2> Enter a name for your Playlist</h2>
 			<p>Please make sure the playlist name does not exist</p>
-			<input type="text" name="plName"/>
-	 		<button type="submit" id="create" className="playlistButton">Create Playlist</button>
+			<input type="text" name="plName" onChange={this.handleChange}/>
+	 		<button type="submit" id="create" className="playlistButton" onClick={this.handleClick}>Create Playlist</button>
 		</section>;
 	}
 });
