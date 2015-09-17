@@ -39,7 +39,7 @@ Uploader.prototype.createPlaylist = function() {
         console.log(result.id);
         console.log(result.snippet.title);
         console.log(result.snippet.description);
-        resolve();
+        resolve(result.id);
       } else {
       console.log('Could not create playlist');
       reject();
@@ -56,29 +56,30 @@ Uploader.prototype.addVideoToPlaylist = function() {
 // Add a video to a playlist. The "startPos" and "endPos" values let you
 // start and stop the video at specific times when the video is played as
 // part of the playlist. However, these values are not set in this example.
-Uploader.prototype.addToPlaylist = function(id, videos, count) {
-  if(count < videos.length){
+Uploader.prototype.addToPlaylist = function(id, videos, playId, upload) {
   var self = this;
-  var details = {
-    videoId: id,
-    kind: 'youtube#video'
-  }
-  var request = gapi.client.youtube.playlistItems.insert({
-    part: 'snippet',
-    resource: {
-      snippet: {
-        playlistId: self.playlistId,
-        resourceId: details
+  if(self.state.count < videos.length){
+    var details = {
+      videoId: id,
+      kind: 'youtube#video'
+    }
+    var request = gapi.client.youtube.playlistItems.insert({
+      part: 'snippet',
+      resource: {
+        snippet: {
+          playlistId: playId,
+          resourceId: details
+        }
       }
-    }
-  });
-  request.execute(function(response) {
-    if(response){
-      count++;
-      console.log(response);
-      self.addToPlaylist(videos[count] , videos, count);
-    }
-  });
+    });
+    request.execute(function(response) {
+      if(response){
+        console.log(response);
+        response.error ? self.state.count + 1 : self.setState({count: self.state.count + 1});
+        console.log(self.state.count);
+        upload.addToPlaylist.call(self, videos[self.state.count] , videos, playId, upload);
+      }
+    });
   }else{
     return;
   }

@@ -9,7 +9,6 @@
   var InitAuth = require('./controllers/initAuth');
     setTimeout(function(){
     if(gapi){
-      console.log("in here?");
   	 var auth = new InitAuth();
   	 auth.googleApiClientReady();
     }
@@ -24,7 +23,6 @@
   $('#authorize').click(function(){
     var auth = new InitAuth();
     auth.handleAuthClick();
-    console.log('clickity click');
   });
 
 
@@ -38,16 +36,13 @@
        cache: false,
        contentType: false,
        processData: false,
-       success:function(response) {
-        console.log('clicked');
-        //var playlistAmount = Math.round((response.length / 200)); 	
-        React.renderComponent(<App videos={response}/>, document.getElementById('example'));
-        //createPlaylistViews(response);
+       success:function(response) {	
         console.log(response);
-        },
-        error : function(err){
+        React.renderComponent(<App videos={response}/>, document.getElementById('example'));
+       },
+       error : function(err){
           console.log('error');
-        }
+       }
 	    });
   });
 }(window.gapi));

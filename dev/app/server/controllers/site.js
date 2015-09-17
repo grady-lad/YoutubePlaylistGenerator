@@ -13,11 +13,9 @@ exports.readBookmarks = function (req , res){
 	console.log(req.file);
 	var filePath = __dirname + "/../../../../" + req.file.path;
 	readFile(filePath).then(inspectFile).then(function(data){
-		console.log('should be rendering the response');
 		res.send(data);
 		fs.unlink(filePath);
 	}).catch(function(err){
-		console.log('in the error');
 		console.log(err);
 		res.render("index", {title: 'home', error: err});
 		fs.unlink(filePath);
@@ -41,7 +39,6 @@ function readFile(path){
 	
 function inspectFile(dataPromise){
 	var deferred = Q.defer();
-	console.log('in inspectFile');
 	if(dataPromise){
 		var $ = cheerio.load(dataPromise);
 		var links = $("a");
@@ -80,12 +77,15 @@ function youtubeRegExMatcher(href){
 function createResponse(tunes){
 	var playlists = {};
 	var vidAmount = 200;
+	var totalReturned = 200
 	//the amount of playlists we can create
 	var amount = Math.round(tunes.length / vidAmount);
-	playlists.total = amount;
+	//playlists.total = amount;
 	// if songs is less than 200 no need for mad looping
 	if(tunes.length <= vidAmount){
-		playlists.playlist1 = tunes;
+		playlists.playlist1 = {};
+		playlists.playlist1.vids = tunes;
+		playlists.playlist1.total = tunes.length;
 	}else{
 
 		var count = 1;
@@ -99,11 +99,14 @@ function createResponse(tunes){
 			//We do this when we have E.G 900 tunes
 			if(vidAmount > tunes.length){
 				vidAmount = tunes.length;
+				totalReturned = (tunes.length - start);
 			}
 			//slice the array
 			var vids = tunes.slice(start , vidAmount);
 			//add it to the playlist object
-			playlists[playlist] = vids
+			playlists[playlist] = {};
+			playlists[playlist].vids = vids;
+			playlists[playlist].total = totalReturned;
 			//increment count, start and end slice values
 			count++;
 			start = vidAmount;
