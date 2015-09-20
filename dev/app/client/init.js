@@ -17,8 +17,7 @@
   var file;
   var $ = require('jquery');
   var React = require('react');
-  var App = require('./hey');
-  var PlaylistComponent = require('./PlaylistColView');
+  var PlaylistDiv = require('./views/PlaylistDiv/PlaylistDiv');
 
   $('#authorize').click(function(){
     var auth = new InitAuth();
@@ -37,8 +36,7 @@
        contentType: false,
        processData: false,
        success:function(response) {	
-        console.log(response);
-        React.renderComponent(<App videos={response}/>, document.getElementById('example'));
+        React.renderComponent(<PlaylistDiv videos={response}/>, document.getElementById('example'));
        },
        error : function(err){
           console.log('error');
