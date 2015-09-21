@@ -42,15 +42,17 @@ function inspectFile(dataPromise){
 	var videoId = "";
 	var result = [];
 	var count = 0;
+	var docHref;
 	  for(var i=0; i < links.length; i++){
 	    var docHref = $(links[i]).attr("href");
-	    if(docHref.indexOf("youtube")){
+	    if(docHref.indexOf("youtube") !== -1){
+	      count ++;
 	      videoId = youtubeRegExMatcher(docHref);
 	      if(videoId !== undefined){
 	    	result.push(videoId);
 	      }
 	    }
-	  }
+	  }   
 	deferred.resolve(createResponse(result));
   }
   else {
@@ -58,14 +60,17 @@ function inspectFile(dataPromise){
   }
   return deferred.promise;
 }
-
+/**
+* Credit to http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
+* for the youtubeRegExMatcher
+**/
 function youtubeRegExMatcher(href){
 	var match;
-	var regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
+	var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
 	
 	match = href.match(regExp);
-	if (match&&match[1].length==11){
-        return match[1];
+	if (match&&match[2].length==11){
+        return match[2];
     }else {
     	return undefined;
     }
