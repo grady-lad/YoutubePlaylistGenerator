@@ -19,11 +19,11 @@
   var React = require('react');
   var PlaylistDiv = require('./views/PlaylistDiv/PlaylistDiv');
 
+
   $('#authorize').click(function(){
     var auth = new InitAuth();
     auth.handleAuthClick();
   });
-
 
   $('#createPlaylist').click(function(e){
     e.preventDefault();

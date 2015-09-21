@@ -4,9 +4,10 @@ var PlaylistsWrapper = require('./PlaylistsWrapper');
 
 
 var PlaylistDiv = React.createClass({
-
+  
   render: function () {
     var videos = this.props.videos;
+    var playlistId = this.props.playlistId;
 	  return (
 	    <div>
 		  {Object.keys(videos).map(function(val , index){

@@ -4,7 +4,6 @@ var Uploader = function(playlistTitle){
   this.playlistId = "";
 }
 
-
 // Create a private playlist.
 Uploader.prototype.createPlaylist = function() {
   var self = this;
@@ -60,6 +59,5 @@ Uploader.prototype.addToPlaylist = function(id, callback) {
     }
   });
 }
-
 
 module.exports = Uploader;
