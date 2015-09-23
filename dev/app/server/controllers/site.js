@@ -2,6 +2,8 @@
 var fs = require("fs");
 var cheerio = require("cheerio");
 var Q		= require("q");
+var _       = require("lodash");
+//var Promise = require("promise");
 
 exports.home = function (req, res) {
   console.log('getting')
@@ -37,22 +39,23 @@ function readFile(path){
 function inspectFile(dataPromise){
   var deferred = Q.defer();
   if(dataPromise){
-    var $ = cheerio.load(dataPromise);
-	var links = $("a");
-	var videoId = "";
-	var result = [];
-	var count = 0;
-	var docHref;
-	  for(var i=0; i < links.length; i++){
-	    var docHref = $(links[i]).attr("href");
-	    if(docHref.indexOf("youtube") !== -1){
-	      count ++;
-	      videoId = youtubeRegExMatcher(docHref);
-	      if(videoId !== undefined){
-	    	result.push(videoId);
-	      }
+    var $ = cheerio.load(dataPromise),
+		links = $("a"),
+		result,
+		videoId,
+		result;
+
+	result = _.map(links ,function(link){
+		return link.attribs.href;
+	}).filter(function(href){
+		return href.indexOf("youtube") !== -1;
+	}).map(function(video){
+		videoId = youtubeRegExMatcher(video);
+	    if(typeof videoId !== undefined){
+	   	  return videoId;
 	    }
-	  }   
+	});
+
 	deferred.resolve(createResponse(result));
   }
   else {
@@ -61,7 +64,8 @@ function inspectFile(dataPromise){
   return deferred.promise;
 }
 /**
-* Credit to http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
+* Credit to:
+* http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
 * for the youtubeRegExMatcher
 **/
 function youtubeRegExMatcher(href){
@@ -77,44 +81,19 @@ function youtubeRegExMatcher(href){
 }
 
 function createResponse(tunes){
-  var playlists = {};
-  var vidAmount = 200;
-  var totalReturned = 200
-  //the amount of playlists we can create
-  var amount = Math.round(tunes.length / vidAmount);
-  //playlists.total = amount;
-  // if songs is less than 200 no need for mad looping
-  if(tunes.length <= vidAmount){
-    playlists.playlist1 = {};
-    playlists.playlist1.vids = tunes;
-    playlists.playlist1.total = tunes.length;
-    playlists.playlist1.playlistTitle = '';
-  }else{
-	var count = 1;
-	var start = 0;
-	//Loop through the amount of playlists we can create
-	for(var i = 1; i <= amount; i++){
-	  //Create a generic playlist name	
-	  var playlist = "playlist";
-	  playlist = playlist + count;
-
-	  //We do this when we have E.G 900 tunes
-	  if(vidAmount > tunes.length){
-	    vidAmount = tunes.length;
-		totalReturned = (tunes.length - start);
-	  }
-	  //slice the array
-	  var vids = tunes.slice(start , vidAmount);
-	  //add it to the playlist object
-	  playlists[playlist] = {};
-	  playlists[playlist].vids = vids;
-	  playlists[playlist].total = totalReturned;
-	  playlists[playlist].playlistTitle = '';
-	  //increment count, start and end slice values
-	  count++;
-	  start = vidAmount;
-	  vidAmount = 200 * count;
-	}
-  }
+ // Figure chunk amount and create x amount of chunks(playlists)
+ var vidAmount = tunes.length < 200 ? tunes.length : 200;
+ var videos = _.chunk(tunes, vidAmount);
+ 
+ //reduce the array of chunks into an object. 
+ var playlists = videos.reduce(function(o , v, i){
+   var playlist = "playlist" + (i + 1);
+   o[playlist] = {
+     vids : v,
+     total : v.length,
+      playlistTitle: ""
+   };
+   return o;
+ }, {});
   return playlists;
 }
