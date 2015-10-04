@@ -31,7 +31,7 @@ var ProgressComponent = React.createClass({
 	var counting = 0;
 	//recursivly call the create addtoplaylist until all videos are processed
 	//Note: Need to add better error handling.
-	upload.createPlaylist().then(function(playlistId){ 
+	/**upload.createPlaylist().then(function(playlistId){ 
 	  upload.addToPlaylist(videos[self.state.count], function callback(response){
 	  	if(!response.error){
 	  		self.setState({count: self.state.count + 1});
@@ -44,7 +44,7 @@ var ProgressComponent = React.createClass({
 		  return;
 		}
 	  });
-	});
+	});**/
   }
 });
 

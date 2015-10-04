@@ -31,6 +31,10 @@ Auth.prototype.checkAuth = function(){
           console.log('Authorized!');
           $('#loading').hide();
           $('#postAuth').show();
+          console.log("here?");
+          setTimeout(function(){
+          $('#wrap').addClass('test');
+        });
           self.loadAPIClientInterfaces();
         }else{
           $('#loading').hide();

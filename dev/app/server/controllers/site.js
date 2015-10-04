@@ -11,6 +11,9 @@ exports.home = function (req, res) {
 };
 	
 exports.readBookmarks = function (req , res){
+  console.log("*************");
+  console.log(req.file);
+  console.log("**************");
   var filePath = __dirname + "/../../../../" + req.file.path;
   readFile(filePath).then(inspectFile).then(function(data){
     res.send(data);

@@ -16,10 +16,16 @@ var CreatePlaylistComponent = React.createClass({
   render: function(){
     return ( 
 	  <div className="createDiv">
-	    <h2> Enter a name for your Playlist</h2>
-		<p>Please make sure the playlist name does not exist</p>
-		<input type="text" name="plName" onChange={this.handleChange}/>
-	 	<button type="submit" id="create" className="playlistButton" onClick={this.handleClick}>Create Playlist</button>
+      <div className="bubble">
+	      <span> Enter a name for your Playlist</span>
+      </div>
+      <div className="playlistContent">
+        <div className="instructions">
+		      <p>Please make sure the playlist name does not exist</p>
+        </div>
+		    <input type="text" name="plName" className="playlistNameInput" placeholder ="Enter name here" onChange={this.handleChange}/>
+	   	  <button type="submit" id="create" className="createPlaylist" onClick={this.handleClick}>Create Playlist</button>
+      </div>
 	  </div>	
 	);
   }

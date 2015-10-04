@@ -1,69 +1,276 @@
+@import url("http://fonts.googleapis.com/css?family=Lato");
+
+
+$lightRed: #e74c3c;
+$darkRed: darken(#c0392b, 1);
+$darkerRed: darken(#c0392b, 3);
+$darkestRed: darken(#c0392b, 10);
+
+*{
+	box-sizing: border-box;
+}
+
+@mixin authMixin {
+  display: none;
+  width: 60%;
+  margin: 0 auto;
+  margin-top: 10%;   
+}
+
+@mixin btnMixin {
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  background-color: $darkerRed;
+  border: 1px solid #eaeaea;
+  border-radius: 0.3em;
+  -webkit-box-shadow: 0px 1px 0px 0px white;
+  -moz-box-shadow: 0px 1px 0px 0px white;
+  box-shadow: 0px 1px 0px 0px white;
+  cursor: pointer;
+  &:active {
+    box-shadow: 0 2px 0 #fff;
+    //We are actually moving the element down
+    transform: translateY(3px); 
+  }
+  &:focus{
+    outline: 0;
+  }
+}
+
+@mixin preBtnPosMixin($direction){
+  position: relative;
+  float: $direction;
+  display: inline-block;
+  width: 80%;
+  padding: 0.8em;
+}
+
+@mixin contentMixin{
+  position: relative;
+  border-radius: 2px;
+  background-color: $darkRed;
+  text-align: left
+}
+
 body{
-	width: 80%;
-    margin: 0 auto;	
-    padding: 0;
+  width: 80%;
+  margin: 0 auto;	
+  padding: 0;
+  font-family: Lato, Arial;
+  color: #fff;
+  background-color: $lightRed;
 }
 
 header {
-	border: .05em solid #e23232;
-	box-shadow: .02em .02em 0.06em rgba(0,0,0,0.4);
-	background-color:#e52d27;
-	text-stroke: 5px #c03036;
-	color: white;
-
+  border: 1px solid;
 	h1 {
-	  color: white;
-	  text-align: center;
+	font-weight: normal;
+  font-size: 4em;
+  font-weight: normal;
+  text-align: center;
 	}
 }
 
 #authorizationContainer {
-	height: 200px;
+	width: 100%;
+	position: relative;
 }
 
 #loading {
-	width: 100%;
-	display: block;
-	opacity: 0.7;
-	z-index: 99;
+  left: 45%;
+  top: 40%;
+  position: fixed;
+  font-size: 10px;
+  text-indent: -9999em;
+  width: 11em;
+  height: 11em;
+  border-radius: 50%;
+  background: #ffffff;
+  background: -moz-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: -webkit-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: -o-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: -ms-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: linear-gradient(to right, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  -webkit-animation: load3 1.4s infinite linear;
+  animation: load3 1.4s infinite linear;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+}
+#loading:before {
+  width: 50%;
+  height: 50%;
+  background: #ffffff;
+  border-radius: 100% 0 0 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: '';
+}
+#loading:after {
+  background: $lightRed;
+  width: 75%;
+  height: 75%;
+  border-radius: 50%;
+  content: '';
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 
-#loadingImg {
-	z-index: 100;
-	margin: auto 0;
+@-webkit-keyframes load3 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load3 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }
 
-#preAuth {
-  display: none;
+#preAuth, #postAuth {
+  @include authMixin;
 }
 
 #postAuth {
 	display: none;
+	width: 60%;
+	margin: 0 auto;
+	margin-top: 10%;	
 }
 
-#example {
-	padding-top: 40px;
+#wrap{
+  overflow: hidden;
+  bottom: 0;
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 2s; /* Firefox < 16 */
+  -ms-animation: fadein 2s; /* Internet Explorer */
+  -o-animation: fadein 2s; /* Opera < 12.1 */
+  animation: fadein 2s;
 }
 
-.playlistDiv {
-	height: 300px;
-	width: 30%;
-	padding: 20px;
-    margin-left:3%;
-    margin-bottom: 3%;
-	border-style: solid;
-	border-width: 1px;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;	
-	float: left;
-	display: inline-block;
-	box-sizing: border-box;
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
-.playlistButton {
-  height: 50px;
-  border-radius: 10px;
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
 
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.bubble{
+ position: relative;
+ font-size: 2em;
+ text-transform: uppercase;
+ text-align: center;
+ background-color: $darkestRed;
+ padding: 1em;
+ border-radius: 3px;
+ color: white;
+
+}
+
+.content{
+  @include contentMixin;
+  padding: 1em;
+  padding-bottom: 4em;
+}
+
+.playlistContent{
+  @include contentMixin;
+  padding: 1em;
+}
+
+.createDiv{
+  position: relative;
+  width: 30%;
+  float: left;
+  margin: 1.5%;
+}
+
+.playlistNameInput{
+  background-color: $darkestRed;
+  border: none;
+  font-family: Lato, Arial;
+  color: #fff;
+  width: 100%;
+  font-size: 2em;
+  height: 2em;
+  text-align: center;
+  font-weight: bold;
+}
+
+.col-half {
+  width: 50%;
+  padding-right: 0.4em;
+  float: left;
+}
+
+.col-half + .col-half {
+  padding-right: 0;
+  padding-left: 0.4em;
+}
+
+.custom-file-upload{
+  @include btnMixin;
+  @include preBtnPosMixin(left);
+}
+
+.uploadBtn{
+  @include preBtnPosMixin(right);
+  @include btnMixin;
+  opacity: 0.5;
+}
+
+.createPlaylist{
+  @include btnMixin;
+  @include preBtnPosMixin(none);
+  margin: 1em auto;
+  display: block;
+}
+
+.input-container{
+  padding: 20px;
+  border: 1px solid;
+}
+
+#file-upload, input[type=file]{
+  display: none;
+}
