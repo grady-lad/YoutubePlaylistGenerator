@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var browserify = require('browserify');
+var babel = require('babelify');
 var reactify = require('reactify');
 var watchify = require('watchify');
 var source = require('vinyl-source-stream');
@@ -24,6 +25,7 @@ var runBrowserifyTask = function (options) {
 		debug: true // We also add sourcemapping
 	})
 	.require('react')
+	.require('react-dom')
 	.require('jquery');
 
 	// This bundle is for our application
@@ -33,10 +35,10 @@ var runBrowserifyTask = function (options) {
 		// These options are just for Watchify
 		cache: {}, packageCache: {}, fullPaths: true
 	})
-	.require(require.resolve('./dev/app/client/init.js'), { entry: true })
-	.transform(reactify) // Transform JSX 
-	.external('react'); // Do not include react
-
+	.require(require.resolve('./dev/app/client/init.js'), { entry: true }) 
+	.transform(babel)
+	.external('react') 
+	.external('jquery');// Do not include react
 	// The actual rebundle process
 	var rebundle = function() {
 		var start = Date.now();

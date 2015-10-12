@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var React = require('react');
 var CreatePlaylistComponent = require('./CreatePlaylistComponent');
 var ProgressComponent = require('./ProgressComponent');
@@ -12,7 +11,8 @@ var PlaylistsWrapper = React.createClass({
       showing: true,
       count: 0,
       loading: false,
-      step: 1
+      step: 1,
+      title: 'Enter a name for your Playlist'
   	};
   },
 
@@ -21,14 +21,31 @@ var PlaylistsWrapper = React.createClass({
   		step : this.state.step + 1
   	});
   },
+  
+  setTitle: function(plTitle){
+     this.setState({
+      title : plTitle
+    });
+  },
 
   render: function(){
-  	switch (this.state.step) {
-  		case 1: 
-  		  return <CreatePlaylistComponent nextStep={this.nextStep} videos={this.props}/>
-  		case 2:
-  		  return <ProgressComponent nextStep={this.nextStep} videos={this.props}/>
-  	}
+    return(
+     <div className="createDiv">
+        <div className="bubble">
+          <span>{this.state.title}</span>
+        </div>
+        <div className="playlistContent">
+          {(() => {
+            switch (this.state.step) {
+              case 1: 
+                return <CreatePlaylistComponent nextStep={this.nextStep} videos={this.props} setTitle={this.setTitle}/>
+              case 2:
+                return <ProgressComponent nextStep={this.nextStep} videos={this.props}/>
+            }
+          })()} 
+        </div>
+     </div>
+     );
   }
 });
 

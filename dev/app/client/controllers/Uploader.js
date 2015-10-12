@@ -51,6 +51,7 @@ Uploader.prototype.addToPlaylist = function(id, callback) {
     }
   });
   /** Need better error handling here**/
+  /** Also need to wrap this in a promise**/
   request.execute(function(response) {
     if(response){
       callback(response);

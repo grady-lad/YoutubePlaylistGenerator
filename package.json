@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "babelify": "^6.3.0",
     "browserify": "^5.10.1",
     "chai": "1.x",
     "cheerio": "0.19.0",
@@ -16,6 +17,7 @@
     "express-handlebars": "2.0.1",
     "gulp": "^3.8.7",
     "gulp-autoprefixer": "^3.0.1",
+    "gulp-babel": "^5.2.1",
     "gulp-if": "^1.2.4",
     "gulp-nodemon": "^1.0.4",
     "gulp-notify": "^1.5.0",
@@ -23,10 +25,10 @@
     "gulp-streamify": "0.0.5",
     "gulp-uglify": "^0.3.2",
     "jquery": "2.1.4",
-    "node-jsx": "^0.11.0",
     "mocha": "2.2.5",
+    "node-jsx": "^0.11.0",
     "q": "1.4.1",
-    "react": "^0.11.1",
+    "react": "0.14.0",
     "reactify": "^0.14.0",
     "vinyl-source-stream": "^0.1.1",
     "watchify": "^1.0.2"
@@ -34,6 +36,7 @@
   "dependencies": {
     "lodash": "^3.10.1",
     "multer": "^1.0.3",
-    "promise": "^7.0.4"
+    "promise": "^7.0.4",
+    "react-dom": "^0.14.0"
   }
 }

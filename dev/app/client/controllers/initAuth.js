@@ -37,7 +37,7 @@ Auth.prototype.checkAuth = function(){
         });
           self.loadAPIClientInterfaces();
         }else{
-          $('#loading').hide();
+          $('.loading').hide();
           $('#preAuth').show();
           console.log('not Authorized');
         }
