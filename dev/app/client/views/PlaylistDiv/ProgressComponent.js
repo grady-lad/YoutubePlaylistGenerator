@@ -22,25 +22,7 @@ var ProgressComponent = React.createClass({
   },
 
   componentDidMount: function(){
-  	var videos = this.props.videos.data.vids;
-  	var playlistTitle = this.props.videos.data.playlistTitle;
-	var self = this;
-	var upload = new Uploader(playlistTitle);
-	var counting = 0;
-	//recursivly call the create addtoplaylist until all videos are processed
-	//Note: Need to add better error handling.
-	upload.createPlaylist().then(function(playlistId){
-	  upload.addToPlaylist(videos[self.state.count], function callback(response){
-	  	self.state.count = !response.error ? self.nextVideo() : self.state.count;
-	  	console.log(self.state.count);
-		if(counting < videos.length){
-		  counting++;
-		  upload.addToPlaylist(videos[counting], callback);
-		}else{
-		  return;
-		}
-	  });
-	});
+    creatingPlaylist.call(this, this.props.videos.data.playlistTitle, this.props.videos.data.vids);
   },
 
   nextVideo: function(){
@@ -49,5 +31,25 @@ var ProgressComponent = React.createClass({
   	});
   }
 });
+
+function creatingPlaylist(title , videos){ 
+  var upload = new Uploader(title);
+  var counting = 0;
+   //recursivly call the create addtoplaylist until all videos are processed
+   //Note: Need to add better error handling.
+  upload.createPlaylist().then((playlistId) => {
+    this.props.setPLID(playlistId);
+	upload.addToPlaylist(videos[this.state.count], function callback(response){
+	  this.state.count = !response.error ? this.nextVideo() : this.state.count;
+	  if(counting < 5){
+	    counting++;
+		upload.addToPlaylist(videos[counting], callback.bind(this));
+	  }else{
+	    this.props.nextStep();
+		return;
+	  }
+	}.bind(this));
+  });
+}
 
 module.exports = ProgressComponent;

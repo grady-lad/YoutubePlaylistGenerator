@@ -10,7 +10,6 @@
     }
   }, 1000);
 
-
   var file;
   var $ = require('jquery');
   var React = require('react');
@@ -25,7 +24,7 @@
   var fileUpload = document.getElementById('file-upload');
   var wrap = document.getElementById('wrap');
   fileUpload.onclick = function(){
-    //Rest the value on every click
+    //Reset the value on every click
     this.value = null;
   }
   fileUpload.onchange = function(){
@@ -60,10 +59,4 @@
 	    });
   });
 
-  function testy(res){
-   var obj = Object.keys(res).reduce(function(val, index){
-    console.log(index);
-   }, {})
-   
-  }
 }(window.gapi));

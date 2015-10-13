@@ -1,6 +1,7 @@
 var React = require('react');
 var CreatePlaylistComponent = require('./CreatePlaylistComponent');
 var ProgressComponent = require('./ProgressComponent');
+var SuccessComponent = require('./SuccessComponent');
 
 
 var PlaylistsWrapper = React.createClass({
@@ -12,7 +13,8 @@ var PlaylistsWrapper = React.createClass({
       count: 0,
       loading: false,
       step: 1,
-      title: 'Enter a name for your Playlist'
+      title: 'Enter a name for your Playlist',
+      PLID: 'https://www.youtube.com/playlist?list='
   	};
   },
 
@@ -28,6 +30,13 @@ var PlaylistsWrapper = React.createClass({
     });
   },
 
+  setPLID: function(playlistId){
+    var url = this.state.PLID + playlistId
+    this.setState({
+      PLID: url
+    });
+  },
+
   render: function(){
     return(
      <div className="createDiv">
@@ -40,7 +49,9 @@ var PlaylistsWrapper = React.createClass({
               case 1: 
                 return <CreatePlaylistComponent nextStep={this.nextStep} videos={this.props} setTitle={this.setTitle}/>
               case 2:
-                return <ProgressComponent nextStep={this.nextStep} videos={this.props}/>
+                return <ProgressComponent nextStep={this.nextStep} videos={this.props} setPLID={this.setPLID}/>
+              case 3:
+                return <SuccessComponent PLID={this.state.PLID}/>
             }
           })()} 
         </div>

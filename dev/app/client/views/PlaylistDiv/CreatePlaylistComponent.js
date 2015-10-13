@@ -6,7 +6,6 @@ var CreatePlaylistComponent = React.createClass({
   	//console.log("in here?");
 	this.props.nextStep();
   this.props.setTitle(this.props.videos.data.playlistTitle);
-  console.log();
   },
 
   handleChange: function(event) {
