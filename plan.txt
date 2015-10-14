@@ -1,0 +1,9 @@
+When we click the create playlist button we to dispatch an event with the name of the playlist. -----> 
+
+Actions -> Which will help pass data to our dispatcher. 
+
+Dispatcher -> This will recieve our dispatcher and broadcast the payload to registerd callbacks
+
+Stores -> Containers for application state & logic
+
+We need a componentview which will be our playlist wrapper. 
