@@ -3,7 +3,6 @@ var React = require('react');
 var CreatePlaylistComponent = React.createClass({
 
   handleClick: function(event){
-  	//console.log("in here?");
 	this.props.nextStep();
   this.props.setTitle(this.props.videos.data.playlistTitle);
   },

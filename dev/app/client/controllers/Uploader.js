@@ -6,7 +6,6 @@ var Uploader = function(playlistTitle){
 
 // Create a private playlist.
 Uploader.prototype.createPlaylist = function() {
-  var self = this;
   var request = gapi.client.youtube.playlists.insert({
     part: 'snippet,status',
     resource: {
@@ -20,15 +19,14 @@ Uploader.prototype.createPlaylist = function() {
     }
   });
   /**Need Better Error handling Here**/
-  return new Promise(function(resolve, reject){
-    request.execute(function(response) {
+  return new Promise((resolve, reject) => {
+    request.execute((response) => {
       var result = response.result;
       if (result) {
-        self.playlistId = result.id
+        this.playlistId = result.id
         resolve(result.id);
       } else {
-      console.log('Could not create playlist');
-      reject();
+        reject(response);
       }
     });
   });
@@ -36,7 +34,6 @@ Uploader.prototype.createPlaylist = function() {
 
 // Add a video to a playlist.
 Uploader.prototype.addToPlaylist = function(id, callback) {
-  var self = this
   var details = {
     videoId: id,
     kind: 'youtube#video'
@@ -45,7 +42,7 @@ Uploader.prototype.addToPlaylist = function(id, callback) {
     part: 'snippet',
     resource: {
       snippet: {
-        playlistId: self.playlistId,
+        playlistId: this.playlistId,
         resourceId: details
       }
     }

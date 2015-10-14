@@ -39,16 +39,16 @@ function creatingPlaylist(title , videos){
    //Note: Need to add better error handling.
   upload.createPlaylist().then((playlistId) => {
     this.props.setPLID(playlistId);
-	upload.addToPlaylist(videos[this.state.count], function callback(response){
-	  this.state.count = !response.error ? this.nextVideo() : this.state.count;
-	  if(counting < 5){
-	    counting++;
-		upload.addToPlaylist(videos[counting], callback.bind(this));
-	  }else{
-	    this.props.nextStep();
-		return;
-	  }
-	}.bind(this));
+	  upload.addToPlaylist(videos[this.state.count], function callback(response){
+	    this.state.count = !response.error ? this.nextVideo() : this.state.count;
+	    if(counting < 5){
+	      counting++;
+		    upload.addToPlaylist(videos[counting], callback.bind(this));
+	    }else{
+	      this.props.nextStep();
+		    return;
+	    }
+	  }.bind(this));
   });
 }
 
