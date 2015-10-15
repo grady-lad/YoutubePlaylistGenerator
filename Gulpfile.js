@@ -26,7 +26,10 @@ var runBrowserifyTask = function (options) {
 	})
 	.require('react')
 	.require('react-dom')
-	.require('jquery');
+	.require('flux')
+	.require('events')
+	.require('object-assign')
+	.require('keymirror');
 
 	// This bundle is for our application
 	var bundler = browserify({
@@ -35,10 +38,14 @@ var runBrowserifyTask = function (options) {
 		// These options are just for Watchify
 		cache: {}, packageCache: {}, fullPaths: true
 	})
-	.require(require.resolve('./dev/app/client/init.js'), { entry: true }) 
+	.require(require.resolve('./dev/app/client/PlaylistApp.js'), { entry: true }) 
 	.transform(babel)
-	.external('react') 
-	.external('jquery');// Do not include react
+	.external('react')
+	.external('react-dom')
+	.external('flux')
+	.external('keymirror')
+	.external('events')
+	.external('object-assign');
 	// The actual rebundle process
 	var rebundle = function() {
 		var start = Date.now();

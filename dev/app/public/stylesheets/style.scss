@@ -11,7 +11,6 @@ $darkestRed: darken(#c0392b, 10);
 }
 
 @mixin authMixin {
-  display: none;
   width: 60%;
   margin: 0 auto;
   margin-top: 10%;   
@@ -150,13 +149,12 @@ header {
 }
 
 #postAuth {
-	display: none;
 	width: 60%;
 	margin: 0 auto;
 	margin-top: 10%;	
 }
 
-#wrap{
+#uploadWrapper{
   overflow: hidden;
   bottom: 0;
   -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
