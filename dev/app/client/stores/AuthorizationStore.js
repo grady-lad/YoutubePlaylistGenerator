@@ -1,37 +1,48 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var AuthorizationConstants = require('../constants/AuthorizationConstants');
-
+var InitAuth = require('../controllers/initAuth');
 var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 var _step = 1;
+var _authorized = false;
 
-function changeStep(auth){
+
+var changeStep = function(auth){
   _step = !auth ? 2 : 3;
+};
+
+var authorizeUser = function(){
+  return new Promise((resolve) => { 
+    InitAuth.handleAuthClick().then((result) => {
+      changeStep(result);
+      resolve();
+    }).catch(() => {
+      //Do not know what to do with the error handling here?
+    })
+  });
 };
 
 var AuthorizationStore = assign({} , EventEmitter.prototype, {
 
-  getStep: function(key){
-  	return _step;
+  getStep: function(){
+    return _step;
+  },
+
+  getAuthortized: function(){
+    return _authorized;
   },
 
   emitChange: function() {
-    console.log(_step);
     this.emit(CHANGE_EVENT);
+    console.log("changed emitted");
   },
 
-  /**
-   * @param {function} callback
-   */
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
-  /**
-   * @param {function} callback
-   */
   removeChangeListener: function(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   }
@@ -41,21 +52,23 @@ var AuthorizationStore = assign({} , EventEmitter.prototype, {
 AppDispatcher.register(function(payload) {
   
   var action = payload.action;
-  var text;
   
   switch(action.actionType) {
     // Respond to RECEIVE_DATA action
-    case AuthorizationConstants.AUTHORIZED:
-      changeStep(action.status);
+  case AuthorizationConstants.AUTHORIZE:
+    authorizeUser().then(function(){
       AuthorizationStore.emitChange();
-      break;
-
-    default:
-      return true;
+    });
+    break;
+  case AuthorizationConstants.AUTHORIZED:
+    changeStep(action.status);
+    AuthorizationStore.emitChange();
+    break;
+  default:
+    return true;
   }
   return true;
 
 });
-
 
 module.exports = AuthorizationStore;

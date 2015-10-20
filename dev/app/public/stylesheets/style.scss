@@ -148,12 +148,6 @@ header {
   @include authMixin;
 }
 
-#postAuth {
-	width: 60%;
-	margin: 0 auto;
-	margin-top: 10%;	
-}
-
 #uploadWrapper{
   overflow: hidden;
   bottom: 0;
@@ -271,4 +265,9 @@ header {
 
 #file-upload, input[type=file]{
   display: none;
+}
+
+#authorize {
+  @include btnMixin;
+  @include preBtnPosMixin(left);
 }

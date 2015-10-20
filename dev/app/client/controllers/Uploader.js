@@ -1,11 +1,12 @@
-"use strict";
 var Uploader = function(playlistTitle){
+  "use strict";
   this.playlistTitle = playlistTitle;
   this.playlistId = "";
-}
+};
 
 // Create a private playlist.
 Uploader.prototype.createPlaylist = function() {
+  "use strict";
   var request = gapi.client.youtube.playlists.insert({
     part: 'snippet,status',
     resource: {
@@ -23,21 +24,22 @@ Uploader.prototype.createPlaylist = function() {
     request.execute((response) => {
       var result = response.result;
       if (result) {
-        this.playlistId = result.id
+        this.playlistId = result.id;
         resolve(result.id);
       } else {
         reject(response);
       }
     });
   });
-}
+};
 
 // Add a video to a playlist.
 Uploader.prototype.addToPlaylist = function(id, callback) {
+  "use strict";
   var details = {
     videoId: id,
     kind: 'youtube#video'
-  }
+  };
   var request = gapi.client.youtube.playlistItems.insert({
     part: 'snippet',
     resource: {
@@ -56,6 +58,6 @@ Uploader.prototype.addToPlaylist = function(id, callback) {
       callback(undefined);
     }
   });
-}
+};
 
 module.exports = Uploader;

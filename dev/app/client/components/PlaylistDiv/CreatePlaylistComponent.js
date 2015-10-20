@@ -2,9 +2,9 @@ var React = require('react');
 
 var CreatePlaylistComponent = React.createClass({
 
-  handleClick: function(event){
-	this.props.nextStep();
-  this.props.setTitle(this.props.videos.data.playlistTitle);
+  handleClick: function(){
+    this.props.nextStep();
+    this.props.setTitle(this.props.videos.data.playlistTitle);
   },
 
   handleChange: function(event) {
@@ -12,12 +12,12 @@ var CreatePlaylistComponent = React.createClass({
   },
 
   render: function(){
-    return ( 
+    return (
       <div className="instructions">
-		    <p>Please make sure the playlist name does not exist</p>
-		    <input type="text" name="plName" className="playlistNameInput" placeholder ="Enter name here" onChange={this.handleChange}/>
-	   	  <button type="submit" id="create" className="createPlaylist" onClick={this.handleClick}>Create Playlist</button>
-      </div> 
+        <p>Please make sure the playlist name does not exist</p>
+        <input type="text" name="plName" className="playlistNameInput" placeholder ="Enter name here" onChange={this.handleChange}/>
+        <button type="submit" id="create" className="createPlaylist" onClick={this.handleClick}>Create Playlist</button>
+      </div>
 	);
   }
 });

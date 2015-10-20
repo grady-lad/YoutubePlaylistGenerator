@@ -1,5 +1,3 @@
-var isProduction = process.env.NODE_ENV === 'production';
-
 // Setup Express
 var express = require('express');
 var app = express();
