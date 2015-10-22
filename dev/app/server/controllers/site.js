@@ -37,12 +37,10 @@ var inspectFile = function(dataPromise){
   var $;
   var result;
   var videoId;
-  
+  var links;
   if(dataPromise){
-    
     $ = cheerio.load(dataPromise); 
     links = $("a"); 
-
     result = _.map(links ,function(link){
       return link.attribs.href;
     }).filter(function(href){
@@ -53,7 +51,6 @@ var inspectFile = function(dataPromise){
         return videoId;
       }
     });
-
     deferred.resolve(createResponse(result));
   }else{
     deferred.reject(err);
@@ -74,7 +71,6 @@ var readFile = function(path){
 }
 
 exports.home = function (req, res) {
-  console.log('getting')
   res.render("index" , {title: 'Home'});
 };
 	

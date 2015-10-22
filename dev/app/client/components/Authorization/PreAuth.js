@@ -1,11 +1,11 @@
 var React = require('react');
-var AuthorizationActions = require('../../actions/AuthorizationActions');
+var ApplicationActions = require('../../actions/ApplicationActions');
 
 var PreAuth = React.createClass({
   
-
   handleClick: function(){
-    AuthorizationActions.authorizeUser();  
+    console.log("clicked?");
+    ApplicationActions.authorizeUser();  
   },
 
   render: function() {

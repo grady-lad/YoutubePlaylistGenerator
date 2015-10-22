@@ -38,7 +38,7 @@ var runBrowserifyTask = function (options) {
 		// These options are just for Watchify
 		cache: {}, packageCache: {}, fullPaths: true
 	})
-	.require(require.resolve('./dev/app/client/PlaylistApp.js'), { entry: true }) 
+	.require(require.resolve('./dev/app/client/Init.js'), { entry: true }) 
 	.transform(babel)
 	.external('react')
 	.external('react-dom')

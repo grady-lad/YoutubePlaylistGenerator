@@ -1,30 +1,44 @@
 var React = require('react');
-var formData = new FormData();
-var UploadActions = require('../../actions/UploadActions');
-var PlaylistStore = require('../../stores/PlaylistStore');
+var ApplicationActions = require('../../actions/ApplicationActions');
+var ApplicationStore = require('../../stores/ApplicationStore');
+var opacityValue = {
+  val: {
+    opacity: 0.5
+  }
+}
 var getUploadState = function(){
   return {
-    file: PlaylistStore.getFile()
+    file: ApplicationStore.getFile(),
+    buttonOpactiy: opacityValue.val
   };
 }
 
 var UploadPlaylistComponent = React.createClass({
   
+  displayName: "uploadPlaylistComponent",
+
   getInitialState: function(){
     return getUploadState();
   },
 
   componentDidMount: function(){
-    PlaylistStore.addChangeListener(this._onChange);
+    ApplicationStore.addChangeListener(this._onChange);
   },
 
-  handleClick: function(){
-    UploadActions.uploadPlaylistToServer(formData);
+  componentWillUnmount: function() {
+    ApplicationStore.removeChangeListener(this._onChange);
+  },
+
+  handleSubmit: function(event){
+    event.preventDefault();
+    ApplicationActions.uploadPlaylistToServer();
+    this.componentWillUnmount();
   },
 
   handleChange: function(event){
-    formData.append("uploaded-file" , event.target.files[0]);
-    this.setState({file : formData});
+    ApplicationActions.selectFile(event.target.files[0]);
+    //opacityValue.val.opacity = 1;
+    //this.setState({buttonOpactiy: opacityValue.val});
   },
 
   render: function(){
@@ -38,7 +52,7 @@ var UploadPlaylistComponent = React.createClass({
             <p> This app creates youtube playlists from your bookmarked youtube videos </p>
             <p> In order to create a playlist you must export your bookmarks as a .html file</p>
             <p>Please refer <a href="#">here</a> on how to do so.</p>
-            <form encType="multipart/form-data">
+            <form encType="multipart/form-data" onSubmit={this.handleSubmit}>
               <div className="col-half">
                 <label htmlFor="file-upload" className="custom-file-upload">
 			             Select File
@@ -46,7 +60,7 @@ var UploadPlaylistComponent = React.createClass({
                 <input id="file-upload" type="file" name="uploader" onChange={this.handleChange}/>
               </div>
               <div className="col-half">
-                <button className="uploadBtn" onClick={this.handleClick} type="submit" id="createPlaylist" disabled={!this.state.file}>Upload</button>
+                <button className="uploadBtn" type="submit" id="createPlaylist" disabled={!this.state.file} style={this.state.buttonOpactiy}>Upload</button>
               </div>
             </form>
           </div>
@@ -54,7 +68,6 @@ var UploadPlaylistComponent = React.createClass({
       </section>
     );
   },
-
   _onChange: function(){
     this.setState(getUploadState());
   }
