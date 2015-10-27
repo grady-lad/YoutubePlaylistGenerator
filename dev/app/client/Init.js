@@ -7,14 +7,18 @@
   var ApplicationActions = require('./actions/ApplicationActions');
   var InitAuth = require('./controllers/initAuth');
   var PlaylistApp = require('./components/PlaylistApp');
- 
-  setTimeout(function(){
+  var count = 0;
+  var polling = setInterval(function(){
     if(gapi){
       InitAuth.googleApiClientReady().then(function(authResult){
         ApplicationActions.checkAuthorized(authResult);
+        clearInterval(polling);
       });
+    }else if(count > 4){
+      console.log("error");
+      clearInterval(polling);
     }
+    count++;
   }, 1000);
   ReactDOM.render(<PlaylistApp/>, document.getElementById('initialContent'));
-
 }(window.gapi));

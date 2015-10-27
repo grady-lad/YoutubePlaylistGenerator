@@ -1,14 +1,14 @@
 var React = require('react');
-
+var PlaylistActions = require('../../actions/PlaylistActions');
+var createdTitle = "";
 var CreatePlaylistComponent = React.createClass({
 
   handleClick: function(){
-    this.props.nextStep();
-    this.props.setTitle(this.props.videos.data.playlistTitle);
+    PlaylistActions.uploadTunesToYoutube(createdTitle, this.props.names); 
   },
 
   handleChange: function(event) {
-    this.props.videos.data.playlistTitle = event.target.value;
+    createdTitle = event.target.value
   },
 
   render: function(){

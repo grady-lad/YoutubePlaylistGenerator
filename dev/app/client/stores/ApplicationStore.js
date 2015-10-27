@@ -105,7 +105,6 @@ AppDispatcher.register(function(payload) {
     break;
 
   case ApplicationConstants.CREATE_PLAYLIST_FILE:
-    console.log("in the switch");
     setPlaylistFile(action.file);
     ApplicationStore.emitChange();
     break;

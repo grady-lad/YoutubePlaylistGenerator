@@ -40,12 +40,13 @@ var PlaylistApp = React.createClass({
                     {Object.keys(vids).map(function(val){
                       return (
                         <section className="col span_1_of_3" key={val}>
-                          <PlaylistsWrapper key={val} data={vids[val]}/>
+                          <PlaylistsWrapper key={val} names={val} data={vids[val]}/>
                         </section>
                       );
                     })}
                     </div>
                   )
+          //NEED TO ADD ERROR HERE AND CHANGE PLAYLISTWRAPPER NAME ABOVE
           default:
             return true;
           }
@@ -59,4 +60,3 @@ var PlaylistApp = React.createClass({
 });
 
 module.exports = PlaylistApp;
-

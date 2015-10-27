@@ -1,40 +1,30 @@
 var React = require('react');
 var CreatePlaylistComponent = require('./CreatePlaylistComponent');
 var ProgressComponent = require('./ProgressComponent');
-var SuccessComponent = require('./SuccessComponent');
+var PlaylistStore = require('../../stores/PlaylistStore');
 
+
+var getChangedState = function(ref){
+  return {
+    step: PlaylistStore.getPlaylistStep(ref),
+    title: PlaylistStore.getPlaylistTitle(ref)
+  };
+}
 
 var PlaylistsWrapper = React.createClass({
-  //Used to create inital variables for our view
-  getInitialState: function(){
-    //console.log(this.props);
-    return {
-      showing: true,
-      count: 0,
-      loading: false,
-      step: 1,
-      title: 'Enter a name for your Playlist',
-      PLID: 'https://www.youtube.com/playlist?list='
-    };
+  
+  displayName: 'playlistWrapper',
+
+  shouldComponentUpdate: function(){
+    return true;
   },
 
-  nextStep: function() {
-    this.setState({
-      step : this.state.step + 1
-    });
+  getInitialState: function(){
+    return PlaylistStore.setupPlaylist(this.props.names);
   },
   
-  setTitle: function(plTitle){
-    this.setState({
-      title : plTitle
-    });
-  },
-
-  setPLID: function(playlistId){
-    var url = this.state.PLID + playlistId;
-    this.setState({
-      PLID: url
-    });
+  componentDidMount: function(){
+    PlaylistStore.addChangeListener(this._onChange);
   },
 
   render: function(){
@@ -46,20 +36,22 @@ var PlaylistsWrapper = React.createClass({
         <div className="playlistContent">
           {(() => {
             switch (this.state.step) {
-            case 1: 
-              return <CreatePlaylistComponent nextStep={this.nextStep} videos={this.props} setTitle={this.setTitle}/>
-            case 2:
-              return <ProgressComponent nextStep={this.nextStep} videos={this.props} setPLID={this.setPLID}/>
-            case 3:
-              return <SuccessComponent PLID={this.state.PLID}/>
+            case "PROGRESS":
+              return <ProgressComponent videos={this.props} names={this.state.title}/>
             default:
-              return true;
+              return <CreatePlaylistComponent names={this.props.names} videos={this.props}/>;
             }
           })()} 
         </div>
      </div>
      );
+  },
+  _onChange: function(param){
+    if(param === this.props.names){
+      this.setState(getChangedState(this.props.names));
+    }
   }
+
 });
 
 module.exports = PlaylistsWrapper;

@@ -17,7 +17,6 @@ var ApplicationActions = {
   },
 
   selectFile: function(selected){
-    console.log("withtin the select file method of the actions");
     AppDispatcher.handleAction({
       actionType: ApplicationConstants.CREATE_PLAYLIST_FILE,
       file: selected

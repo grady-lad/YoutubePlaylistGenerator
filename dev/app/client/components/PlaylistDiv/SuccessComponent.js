@@ -6,7 +6,7 @@ var SuccessComponent = React.createClass({
     return (
   		<div className="success">
         <p> Playlist successfuly created which can be seen</p>
-        <a href={this.props.PLID}> here </a>
+        <a href={this.props.data}> here </a>
   		</div>
   	);
   }

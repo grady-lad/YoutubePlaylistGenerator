@@ -1,56 +1,56 @@
 var React = require('react');
-var Uploader = require('./../../controllers/Uploader');
-
-
-var creatingPlaylist = function(title, videos) {
-  var upload = new Uploader(title);
-  var counting = 0;
- 
-   //recursivly call the create addtoplaylist until all videos are processed
-   //Note: Need to add better error handling.
-  upload.createPlaylist().then((playlistId) => {
-    this.props.setPLID(playlistId);
-    upload.addToPlaylist(videos[this.state.count], function callback(response){
-      this.state.count = !response.error ? this.nextVideo() : this.state.count;
-      if(counting < 5){
-        counting++;
-        upload.addToPlaylist(videos[counting], callback.bind(this));
-      }else{
-        this.props.nextStep();
-        return;
-      }
-    }.bind(this));
-  });
+var UploaderStore = require('./../../stores/UploaderStore');
+var UploaderActions = require('./../../actions/UploaderActions');
+var SuccessComponent = require('./SuccessComponent');
+//RENAME THIS FILE
+var getChangedState = function(ref){
+  return{
+    step: UploaderStore.getUploadStep(ref),
+    count: UploaderStore.getUploadedCount(ref),
+    url: UploaderStore.getPlaylistUrl(ref)
+  }
 }
-
 var ProgressComponent = React.createClass({
+
+  shouldComponentUpdate: function(){
+    return true;
+  },
   
   getInitialState: function() {
-    return {
-      showing: true,
-      count: 0,
-      total: this.props.videos.data.total
-    };
+    return UploaderStore.setupUploadInfo(this.props.videos.names);
+  },
+
+  componentDidMount: function(){
+    UploaderStore.addChangeListener(this._onChange);
+    UploaderActions.uploadPlaylistToYoutube(this.props.videos.names, this.props.videos.data.vids , this.props.names);
   },
   
   render: function(){
     return (
       <div>
-        <p>LOADING HERE</p>
-        <p> Successfully added {this.state.count} out of {this.state.total} videos</p>
+          {(() => {
+            switch (this.state.step) {
+            case "SUCCESS":
+              return <SuccessComponent data={this.state.url}/>;
+            default:
+              return(
+                  <div>
+                  <p>LOADING HERE</p>
+                  <p> Successfully added {this.state.count} out of {this.props.videos.data.total} videos</p>
+                  </div>
+                ); 
+            }
+          })()} 
       </div>
 	 );
   },
 
-  componentDidMount: function(){
-    creatingPlaylist.call(this, this.props.videos.data.playlistTitle, this.props.videos.data.vids);
-  },
-
-  nextVideo: function(){
-    this.setState({
-      count : this.state.count + 1
-    });
+  _onChange: function(param){
+    if(param === this.props.videos.names){
+      this.setState(getChangedState(this.props.videos.names));
+    }
   }
+
 });
 
 

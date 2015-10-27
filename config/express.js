@@ -16,9 +16,6 @@ module.exports = function(app){
 	
   app.use(express.static(__dirname + "/../build"));
   app.use(multer({dest: './uploads', rename: function (fieldname, filename) {
-    console.log("in here");
-    console.log("filename");
-    console.log("*****************");
     return filename+Date.now();
   }}).single('uploaded-file'));
 };
