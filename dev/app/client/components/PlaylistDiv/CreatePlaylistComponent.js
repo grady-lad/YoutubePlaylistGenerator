@@ -4,7 +4,7 @@ var createdTitle = "";
 var CreatePlaylistComponent = React.createClass({
 
   handleClick: function(){
-    PlaylistActions.uploadTunesToYoutube(createdTitle, this.props.names); 
+    PlaylistActions.uploadTunesToYoutube(createdTitle, this.props.plId); 
   },
 
   handleChange: function(event) {

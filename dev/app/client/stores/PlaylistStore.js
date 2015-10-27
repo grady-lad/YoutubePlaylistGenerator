@@ -1,7 +1,7 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
-var PlaylistConstants = require('../constants/PlaylistConstants');
+var ApplicationConstants = require('../constants/ApplicationConstants');
 
 var CHANGE_EVENT = 'change';
 var _playlistInfo = {};
@@ -61,13 +61,17 @@ AppDispatcher.register(function(payload) {
   var action = payload.action;
   
   switch(action.actionType) {
-  case PlaylistConstants.CREATE_STORE:
-    setupPlaylist(action.ref);
+  case ApplicationConstants.CREATE_STORE:
+    PlaylistStore.setupPlaylist(action.ref);
     PlaylistStore.emitChange(action.ref);
     break;
-  case PlaylistConstants.UPLOAD_TO_YOUTUBE:
+  case ApplicationConstants.UPLOAD_TO_YOUTUBE:
     changePlaylistTitle(action.title, action.ref);
     changePlaylistStep(('PROGRESS'), action.ref);
+    PlaylistStore.emitChange(action.ref);
+    break;
+  case ApplicationConstants.RETRY_PLAYLIST:
+    PlaylistStore.setupPlaylist(action.ref);
     PlaylistStore.emitChange(action.ref);
     break;
   default:

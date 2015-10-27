@@ -14,8 +14,7 @@ var createResponse = function(tunes){
     var playlist = "playlist" + (i + 1);
     o[playlist] = {
       vids : v,
-      total : v.length,
-      playlistTitle: ""
+      total : v.length
     };
     return o;
   }, {});

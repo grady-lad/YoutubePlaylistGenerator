@@ -1,5 +1,5 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
-var ApplicationConstants = require('../constants/UploaderConstants');
+var ApplicationConstants = require('../constants/ApplicationConstants');
 
 var UploaderActions = {
   

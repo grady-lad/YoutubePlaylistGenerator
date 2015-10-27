@@ -1,6 +1,6 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
-var UploaderConstants = require('../constants/UploaderConstants');
+var ApplicationConstants = require('../constants/ApplicationConstants');
 var assign = require('object-assign');
 var Uploader = require('./../controllers/Uploader');
 var CHANGE_EVENT = 'change';
@@ -18,8 +18,11 @@ var UploaderStore = assign({} , EventEmitter.prototype, {
   },
 
   getPlaylistUrl: function(ref){
-    console.log(ref + " url is " + _uploadInfo[ref].playlistUrl);
     return _uploadInfo[ref].playlistUrl;
+  },
+
+  getPlaylistError: function(ref){
+    return _uploadInfo[ref].error;
   },
 
   emitChange: function(ref) {
@@ -42,8 +45,16 @@ var UploaderStore = assign({} , EventEmitter.prototype, {
     return _uploadInfo[ref];
   },
 
+  setCreatePlaylistError: function(ref, error){
+    _uploadInfo[ref].error = error;
+  },
+
   setPlaylistUrl: function(ref, playlistId){
     _uploadInfo[ref].playlistUrl = "https://www.youtube.com/playlist?list=" + playlistId;
+  },
+
+  incrementCount: function(ref){
+    _uploadInfo[ref].count++;
   },
 
   removeChangeListener: function(callback) {
@@ -54,16 +65,18 @@ var UploaderStore = assign({} , EventEmitter.prototype, {
 var createPlaylist = function(plId , plVids, plName){
   var upload = new Uploader(plName);
   var counting = 0;
-   //recursivly call the create addtoplaylist until all videos are processed
-   //Note: Need to add better error handling.
+  //recursivly call the create addtoplaylist until all videos are processed
   upload.createPlaylist().then((playlistId) => {
+    
     UploaderStore.setPlaylistUrl(plId, playlistId);
-    upload.addToPlaylist(plVids[_uploadInfo[plId].count], function callback(response){
+
+    upload.addToPlaylist(plVids[UploaderStore.getUploadedCount(plId)], function callback(response){
+      
       if(!response.error){
-        _uploadInfo[plId].count++;
+        UploaderStore.incrementCount(plId);
         UploaderStore.emitChange(plId);
       }
-      if(counting <= 2){
+      if(counting <= plVids.length){
         counting++;
         upload.addToPlaylist(plVids[counting], callback);
       }else{
@@ -71,6 +84,11 @@ var createPlaylist = function(plId , plVids, plName){
         UploaderStore.emitChange(plId);
       }
     });
+
+  }).catch((response) => {
+    UploaderStore.setCreatePlaylistError(plId, response.error.message);
+    UploaderStore.setUploadStep(plId, "ERROR");
+    UploaderStore.emitChange(plId);
   });
 };
 
@@ -81,14 +99,13 @@ AppDispatcher.register(function(payload) {
   
   switch(action.actionType) {
     // Respond to RECEIVE_DATA action
-  case UploaderConstants.UPLOAD_TUNES:
+  case ApplicationConstants.UPLOAD_TUNES:
     createPlaylist(action.playlistId, action.playlistVids, action.playlistName);
     break;
   default:
     return true;
   }
   return true;
-
 });
 
 module.exports = UploaderStore;

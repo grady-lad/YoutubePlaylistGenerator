@@ -19,7 +19,6 @@ Uploader.prototype.createPlaylist = function() {
       }
     }
   });
-  /**Need Better Error handling Here**/
   return new Promise((resolve, reject) => {
     request.execute((response) => {
       var result = response.result;
@@ -49,8 +48,6 @@ Uploader.prototype.addToPlaylist = function(id, callback) {
       }
     }
   });
-  /** Need better error handling here**/
-  /** Also need to wrap this in a promise**/
   request.execute(function(response) {
     if(response){
       callback(response);

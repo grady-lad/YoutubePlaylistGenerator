@@ -40,7 +40,7 @@ var PlaylistApp = React.createClass({
                     {Object.keys(vids).map(function(val){
                       return (
                         <section className="col span_1_of_3" key={val}>
-                          <PlaylistsWrapper key={val} names={val} data={vids[val]}/>
+                          <PlaylistsWrapper key={val} plId={val} data={vids[val]}/>
                         </section>
                       );
                     })}

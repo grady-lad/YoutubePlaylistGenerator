@@ -20,7 +20,7 @@ var PlaylistsWrapper = React.createClass({
   },
 
   getInitialState: function(){
-    return PlaylistStore.setupPlaylist(this.props.names);
+    return PlaylistStore.setupPlaylist(this.props.plId);
   },
   
   componentDidMount: function(){
@@ -37,9 +37,9 @@ var PlaylistsWrapper = React.createClass({
           {(() => {
             switch (this.state.step) {
             case "PROGRESS":
-              return <ProgressComponent videos={this.props} names={this.state.title}/>
+              return <ProgressComponent videos={this.props} playlistName={this.state.title}/>
             default:
-              return <CreatePlaylistComponent names={this.props.names} videos={this.props}/>;
+              return <CreatePlaylistComponent plId={this.props.plId} videos={this.props}/>;
             }
           })()} 
         </div>
@@ -47,8 +47,8 @@ var PlaylistsWrapper = React.createClass({
      );
   },
   _onChange: function(param){
-    if(param === this.props.names){
-      this.setState(getChangedState(this.props.names));
+    if(param === this.props.plId){
+      this.setState(getChangedState(this.props.plId));
     }
   }
 
