@@ -1,5 +1,5 @@
 (function(gapi){
-  "use strict";
+  "use strict"; 
   /** Need to add some polling fucntionality that checks that the google api
       function is loaded, but this is IEFF. **/
   var ReactDOM = require('react-dom');
