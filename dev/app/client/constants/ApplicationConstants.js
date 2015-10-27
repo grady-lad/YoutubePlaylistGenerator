@@ -8,5 +8,6 @@ module.exports = keyMirror({
   UPLOAD_PLAYLISTS: null,
   UPLOAD_TO_YOUTUBE: null,
   UPLOAD_TUNES: null,
-  RETRY_PLAYLIST: null
+  RETRY_PLAYLIST: null,
+  FILE_VALIDATION_ERROR: null
 });

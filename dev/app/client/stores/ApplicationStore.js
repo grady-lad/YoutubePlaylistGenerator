@@ -11,10 +11,15 @@ var _step = {
 var _authorized = false;
 var _playlists;
 var _file;
-
+var _validationError = '';
 
 var changeStep = function(stepValue){
   _step.status = stepValue
+};
+
+var setValidationError = function(error){
+  _validationError = error;
+  console.log(_validationError);
 };
 
 var authorize = function(){
@@ -65,6 +70,10 @@ var ApplicationStore = assign({} , EventEmitter.prototype, {
     return _file;
   },
 
+  getValidationError: function(){
+    return _validationError;
+  },
+
   emitChange: function() {
     this.emit(CHANGE_EVENT);
   },
@@ -109,8 +118,14 @@ AppDispatcher.register(function(payload) {
     })
     break;
 
+  case ApplicationConstants.FILE_VALIDATION_ERROR:
+    setValidationError(action.error);
+    ApplicationStore.emitChange();
+    break;
+
   case ApplicationConstants.CREATE_PLAYLIST_FILE:
     setPlaylistFile(action.file);
+    setValidationError("");
     ApplicationStore.emitChange();
     break;
 

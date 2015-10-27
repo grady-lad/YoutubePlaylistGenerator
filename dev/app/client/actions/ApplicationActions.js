@@ -23,6 +23,13 @@ var ApplicationActions = {
     });
   },
 
+  fileValidationError: function(){
+    AppDispatcher.handleAction({
+      actionType: ApplicationConstants.FILE_VALIDATION_ERROR,
+      error: 'We only accept .html files'
+    });
+  },
+
   selectFile: function(selected){
     AppDispatcher.handleAction({
       actionType: ApplicationConstants.CREATE_PLAYLIST_FILE,

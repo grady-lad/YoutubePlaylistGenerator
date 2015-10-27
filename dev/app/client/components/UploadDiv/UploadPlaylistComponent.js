@@ -9,7 +9,8 @@ var opacityValue = {
 var getUploadState = function(){
   return {
     file: ApplicationStore.getFile(),
-    buttonOpactiy: opacityValue.val
+    buttonOpactiy: opacityValue.val,
+    validationError: ApplicationStore.getValidationError()
   };
 }
 
@@ -36,7 +37,11 @@ var UploadPlaylistComponent = React.createClass({
   },
 
   handleChange: function(event){
-    ApplicationActions.selectFile(event.target.files[0]);
+    if(event.target.files[0].type === 'text/html'){
+      ApplicationActions.selectFile(event.target.files[0]);
+    }else{
+      ApplicationActions.fileValidationError();
+    }
     //opacityValue.val.opacity = 1;
     //this.setState({buttonOpactiy: opacityValue.val});
   },
@@ -52,6 +57,7 @@ var UploadPlaylistComponent = React.createClass({
             <p> This app creates youtube playlists from your bookmarked youtube videos </p>
             <p> In order to create a playlist you must export your bookmarks as a .html file</p>
             <p>Please refer <a href="#">here</a> on how to do so.</p>
+            <p className="error">{this.state.validationError}</p>
             <form encType="multipart/form-data" onSubmit={this.handleSubmit}>
               <div className="col-half">
                 <label htmlFor="file-upload" className="custom-file-upload">
