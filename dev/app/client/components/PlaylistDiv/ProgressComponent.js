@@ -30,21 +30,21 @@ var ProgressComponent = React.createClass({
   render: function(){
     return (
       <div>
-          {(() => {
-            switch (this.state.step) {
-            case "SUCCESS":
-              return <SuccessComponent data={this.state.url}/>;
-            case "ERROR":
-              return <ErrorComponent error={this.state.error} plId={this.props.videos.plId}/>
-            default:
-              return(
-                  <div>
-                  <p>LOADING HERE</p>
-                  <p> Successfully added {this.state.count} out of {this.props.videos.data.total} videos</p>
-                  </div>
-                ); 
-            }
-          })()} 
+        {(() => {
+          switch (this.state.step) {
+          case "SUCCESS":
+            return <SuccessComponent data={this.state.url}/>;
+          case "ERROR":
+            return <ErrorComponent error={this.state.error} plId={this.props.videos.plId}/>
+          default:
+            return(
+              <div>
+                <p>LOADING HERE</p>
+                <p> Successfully added {this.state.count} out of {this.props.videos.data.total} videos</p>
+              </div>
+            ); 
+          }
+        })()} 
       </div>
 	 );
   },

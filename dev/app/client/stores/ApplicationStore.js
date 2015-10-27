@@ -84,6 +84,11 @@ AppDispatcher.register(function(payload) {
   var action = payload.action;
   
   switch(action.actionType) {
+
+  case ApplicationConstants.GAPIFAILED:
+    changeStep(action.status);
+    ApplicationStore.emitChange();
+    break;
     // Respond to RECEIVE_DATA action
   case ApplicationConstants.AUTHORIZECHECK:
     if(action.status){

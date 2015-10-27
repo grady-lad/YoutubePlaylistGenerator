@@ -3,7 +3,6 @@ var PlaylistActions = require('./../../actions/PlaylistActions');
 var PlaylistError = React.createClass({
 
   handleClick: function(){
-  	console.log(this.props);
     PlaylistActions.retryCreatePlaylist(this.props.plId);
   },
   render: function(){

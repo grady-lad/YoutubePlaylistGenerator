@@ -15,7 +15,7 @@
         clearInterval(polling);
       });
     }else if(count > 4){
-      console.log("error");
+      ApplicationActions.noGAPI();
       clearInterval(polling);
     }
     count++;

@@ -6,6 +6,7 @@ var LoadingSpinner = require('./common/LoadingSpinner');
 var PreAuth = require('./Authorization/PreAuth');
 var UploadPlaylistComponent = require('./UploadDiv/UploadPlaylistComponent');
 var PlaylistsWrapper = require('./PlaylistDiv/PlaylistsWrapper');
+var NoGapiError = require('./Errors/NoGapiError');
 var vids;
 
 var getChangedState = function(){
@@ -36,17 +37,18 @@ var PlaylistApp = React.createClass({
             return <UploadPlaylistComponent/>
           case "CREATEPLAYLISTDIVS":
             return (
-                    <div id="aulone" className="group">
-                    {Object.keys(vids).map(function(val){
-                      return (
-                        <section className="col span_1_of_3" key={val}>
-                          <PlaylistsWrapper key={val} plId={val} data={vids[val]}/>
-                        </section>
-                      );
-                    })}
-                    </div>
-                  )
-          //NEED TO ADD ERROR HERE AND CHANGE PLAYLISTWRAPPER NAME ABOVE
+              <div id="aulone" className="group">
+                {Object.keys(vids).map(function(val){
+                  return (
+                    <section className="col span_1_of_3" key={val}>
+                      <PlaylistsWrapper key={val} plId={val} data={vids[val]}/>
+                    </section>
+                  );
+                })}
+              </div>
+            )
+          case "NOGAPI":
+            return <NoGapiError/>
           default:
             return true;
           }

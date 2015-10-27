@@ -3,6 +3,13 @@ var ApplicationConstants = require('../constants/ApplicationConstants');
 
 var ApplicationActions = {
   
+  noGAPI: function(){
+    AppDispatcher.handleAction({
+      actionType: ApplicationConstants.GAPIFAILED,
+      status: "NOGAPI"
+    });
+  },
+
   checkAuthorized: function(auth){
     AppDispatcher.handleAction({
       actionType: ApplicationConstants.AUTHORIZECHECK,

@@ -1,6 +1,7 @@
 var keyMirror = require('keymirror');
 
 module.exports = keyMirror({
+  GAPIFAILED: null,
   AUTHORIZECHECK: null,
   AUTHORIZEATTEMPT: null,
   CREATE_PLAYLIST_FILE: null,
