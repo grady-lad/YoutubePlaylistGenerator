@@ -1,22 +1,21 @@
 var React = require('react');
 var ApplicationActions = require('../../actions/ApplicationActions');
 var ApplicationStore = require('../../stores/ApplicationStore');
-var opacityValue = {
-  val: {
-    opacity: 0.5
-  }
-}
+
 var getUploadState = function(){
   return {
     file: ApplicationStore.getFile(),
-    buttonOpactiy: opacityValue.val,
     validationError: ApplicationStore.getValidationError()
   };
-}
+};
 
 var UploadPlaylistComponent = React.createClass({
   
   displayName: "uploadPlaylistComponent",
+
+  visible: 0.5,
+
+  enabled: undefined,
 
   getInitialState: function(){
     return getUploadState();
@@ -33,17 +32,18 @@ var UploadPlaylistComponent = React.createClass({
   handleSubmit: function(event){
     event.preventDefault();
     ApplicationActions.uploadPlaylistToServer();
-    
   },
 
   handleChange: function(event){
     if(event.target.files[0].type === 'text/html'){
       ApplicationActions.selectFile(event.target.files[0]);
+      this.visible = 1;
+      this.enabled = true;
     }else{
+      this.enabled = undefined;
+      this.visible = 0.5;
       ApplicationActions.fileValidationError();
     }
-    //opacityValue.val.opacity = 1;
-    //this.setState({buttonOpactiy: opacityValue.val});
   },
 
   render: function(){
@@ -66,7 +66,7 @@ var UploadPlaylistComponent = React.createClass({
                 <input id="file-upload" type="file" name="uploader" onChange={this.handleChange}/>
               </div>
               <div className="col-half">
-                <button className="uploadBtn" type="submit" id="createPlaylist" disabled={!this.state.file} style={this.state.buttonOpactiy}>Upload</button>
+                <button className="uploadBtn" type="submit" id="createPlaylist" disabled={!this.enabled} style={{opacity: this.visible}}>Upload</button>
               </div>
             </form>
           </div>

@@ -4,15 +4,16 @@ var ApplicationConstants = require('../constants/ApplicationConstants');
 var InitAuth = require('../controllers/initAuth');
 var assign = require('object-assign');
 
-var CHANGE_EVENT = 'change';
 var _step = {
   status: "LOADING"
 };
+
 var _authorized = false;
 var _playlists;
 var _file;
 var _validationError = '';
 var _createDivs = false;
+var CHANGE_EVENT = 'change';
 
 var changeStep = function(stepValue){
   _step.status = stepValue
