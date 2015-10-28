@@ -12,6 +12,7 @@ var _authorized = false;
 var _playlists;
 var _file;
 var _validationError = '';
+var _createDivs = false;
 
 var changeStep = function(stepValue){
   _step.status = stepValue
@@ -19,7 +20,10 @@ var changeStep = function(stepValue){
 
 var setValidationError = function(error){
   _validationError = error;
-  console.log(_validationError);
+};
+
+var setCreateDivs = function(){
+  _createDivs = true;
 };
 
 var authorize = function(){
@@ -37,16 +41,18 @@ var setPlaylistFile = function(selectedFile){
 }
 
 var fetchPlaylistsFromServer = function(){
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     var formData = new FormData();
     var xhr = new XMLHttpRequest();
     formData.append("uploaded-file" , _file);
-    xhr.onload = function(){
-      if(this.status === 200){
-        _playlists = JSON.parse(this.response);
+    xhr.addEventListener('load', function(){
+      if(xhr.status === 200){
+        _playlists = JSON.parse(xhr.response);
         resolve();
+      }else{
+        reject(JSON.parse(xhr.response));
       }
-    };
+    });
     xhr.open('POST', '/', true);
     xhr.send(formData);
   });
@@ -68,6 +74,10 @@ var ApplicationStore = assign({} , EventEmitter.prototype, {
 
   getFile: function(){
     return _file;
+  },
+
+  getCreateDivs: function(){
+    return _createDivs;
   },
 
   getValidationError: function(){
@@ -132,7 +142,12 @@ AppDispatcher.register(function(payload) {
   case ApplicationConstants.UPLOAD_PLAYLISTS:
     fetchPlaylistsFromServer().then(() => {
       changeStep("CREATEPLAYLISTDIVS");
+      setCreateDivs();
       ApplicationStore.emitChange();
+    }).catch((err) => {
+      setValidationError(err.error);
+      ApplicationStore.emitChange();
+      ApplicationStore.getValidationError();
     });
     break;
   default:

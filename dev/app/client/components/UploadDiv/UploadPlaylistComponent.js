@@ -33,7 +33,7 @@ var UploadPlaylistComponent = React.createClass({
   handleSubmit: function(event){
     event.preventDefault();
     ApplicationActions.uploadPlaylistToServer();
-    this.componentWillUnmount();
+    
   },
 
   handleChange: function(event){
@@ -75,7 +75,11 @@ var UploadPlaylistComponent = React.createClass({
     );
   },
   _onChange: function(){
-    this.setState(getUploadState());
+    if(!ApplicationStore.getCreateDivs()){
+      this.setState(getUploadState());
+    }else{
+      this.componentWillUnmount();
+    }
   }
 });
 
