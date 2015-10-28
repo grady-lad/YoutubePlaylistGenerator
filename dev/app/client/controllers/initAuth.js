@@ -69,8 +69,6 @@ var Auth ={
             this.loadAPIClientInterfaces().then(function(result){
               resolve(result);
             });
-          }else{
-            reject(this.authorized);
           }
         });
     });

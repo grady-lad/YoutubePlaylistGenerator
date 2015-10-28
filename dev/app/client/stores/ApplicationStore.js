@@ -30,9 +30,7 @@ var authorize = function(){
   return new Promise((resolve) => { 
     InitAuth.handleAuthClick().then((result) => {
       resolve(result);
-    }).catch(() => {
-      //Do not know what to do with the error handling here?
-    })
+    });
   });
 };
 
