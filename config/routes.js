@@ -1,4 +1,4 @@
-var site = require('../dev/app/server/controllers/site');
+var site = require('../dev/app/server/api/site');
 
 
 module.exports = function(app){

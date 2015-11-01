@@ -3,23 +3,6 @@ var fs = require("fs");
 var cheerio = require("cheerio");
 var _ = require("lodash");
 
-var createResponse = function(tunes){
- // Figure chunk amount and create x amount of chunks(playlists)
-  var vidAmount = tunes.length < 200 ? tunes.length : 200;
-  var videos = _.chunk(tunes, vidAmount);
- 
- //reduce the array of chunks into an object. 
-  var playlists = videos.reduce(function(o , v, i){
-    var playlist = "playlist" + (i + 1);
-    o[playlist] = {
-      vids : v,
-      total : v.length
-    };
-    return o;
-  }, {});
-  return playlists;
-};
-
 var youtubeRegExMatcher = function(href){  
   var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
   var match = href.match(regExp);
@@ -30,7 +13,24 @@ var youtubeRegExMatcher = function(href){
   return undefined;
 };
 
-var inspectFile = function(dataPromise){
+var createResponse = function(tunes){
+ // Figure chunk amount and create x amount of chunks(playlists)
+  var vidAmount = tunes.length < 200 ? tunes.length : 200;
+  var videos = _.chunk(tunes, vidAmount);
+ 
+ //reduce the array of chunks into an object. 
+  var playlists = videos.reduce((o , v, i) => {
+    let playlist = "playlist" + (i + 1);
+    o[playlist] = {
+      vids : v,
+      total : v.length
+    };
+    return o;
+  }, {});
+  return playlists;
+};
+
+exports.inspectFile = function(dataPromise){
   return new Promise((resolve, reject) => {
     var $;
     var result;
@@ -59,7 +59,8 @@ var inspectFile = function(dataPromise){
   });
 };
 
-var readFile = function(path){
+exports.readFile = function(path){
+  console.log("reading the file");
   return new Promise((resolve, reject) => {
     fs.readFile(path, 'utf8', function(err, contents) {
       if(err){
@@ -68,20 +69,5 @@ var readFile = function(path){
         resolve(contents);
       }
     });
-  });
-};
-
-exports.home = function (req, res) {
-  res.render("index" , {title: 'Home'});
-};
-	
-exports.readBookmarks = function (req , res){
-  var filePath = __dirname + "/../../../../" + req.file.path;
-  readFile(filePath).then(inspectFile).then(function(data){
-    res.send(data);
-    fs.unlink(filePath);
-  }).catch(function(err){
-    res.status(500).send({error: err});
-    fs.unlink(filePath);
   });
 };
