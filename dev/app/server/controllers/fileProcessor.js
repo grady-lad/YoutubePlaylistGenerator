@@ -3,71 +3,123 @@ var fs = require("fs");
 var cheerio = require("cheerio");
 var _ = require("lodash");
 
-var youtubeRegExMatcher = function(href){  
-  var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  var match = href.match(regExp);
-  
-  if(match&&match[2].length === 11){
-    return match[2];
+function promisify(fn){
+  return function (){
+    const args = [].slice.call(arguments);
+    return new Promise((resolve, reject) => {
+      return fn.apply(null, args.concat((err, contents) => {
+        if(err) {
+          return reject(err);
+        }
+        return resolve(contents);
+      }));
+    });
   }
-  return undefined;
-};
+}
 
-var createResponse = function(tunes){
- // Figure chunk amount and create x amount of chunks(playlists)
-  var vidAmount = tunes.length < 200 ? tunes.length : 200;
-  var videos = _.chunk(tunes, vidAmount);
- 
- //reduce the array of chunks into an object. 
-  var playlists = videos.reduce((o , v, i) => {
-    let playlist = "playlist" + (i + 1);
-    o[playlist] = {
-      vids : v,
-      total : v.length
+let readDir = promisify(fs.readFile);
+
+
+function getHtmlTags(content, tagType) {
+  return cheerio.load(content)(tagType);
+}
+
+function isYoutube(urlLink) {
+  return urlLink.indexOf('youtube') !== -1;
+}
+
+function calculateMaxVidAmount(videolist, amount) {
+  return videolist.length < amount ? videolist.length : amount;
+}
+
+function validateVideoLength(vid){
+  return vid&&vid.length === 11
+}
+
+function createChunks(content, amount) {
+  console.log("here?")
+  return new Promise((resolve) =>{
+    resolve ._chunk(content , amount);
+  })
+}
+
+/**function createPlaylistObject(arrOfVids) {
+  return arrOfVids.reduce((obj, arr, index) => {
+    obj['playlist' + (index + 1)] = {
+      vids : arr,
+      total : arr.length
     };
-    return o;
-  }, {});
-  return playlists;
-};
+    return obj;
+  }, {})
+}**/
 
-exports.inspectFile = function(dataPromise){
-  return new Promise((resolve, reject) => {
-    var $;
-    var result;
-    var videoId;
-    var links;
-    
-    $ = cheerio.load(dataPromise); 
-    links = $("a"); 
+function one() {
+  return readDir(__dirname + '/../data/lasttune.html', 'utf8');
+}
 
-    result = _.map(links ,function(link){
+/**
+Tell the computer what you want.
+I want to read a file.
+I want to get all hmtltags based on the arguments.
+I want to check if urls contain youtube links.
+I want to get all the valid video id of the youtubelinks.
+I want to create arrays of my video array.
+I want to convert that array into an object.
+**/
+
+function not(fn) {
+  return function(val) {
+    return !fn(val);
+  }
+}
+
+function containsYoutube(urlList) {
+  return urlList.filter((urlItem) => {
+    return urlItem.indexOf('youtube') !== -1;
+  })
+}
+
+function processHrefsFromFile(filePath){
+  return readDir(filePath, 'utf8')
+  .then((htmlString) => {
+    return _.map(getHtmlTags(htmlString, 'a'), (link) => {
       return link.attribs.href;
-    }).filter(function(href){
-      return href.indexOf("youtube") !== -1;
-    }).map(function(video){
-      videoId = youtubeRegExMatcher(video);
-      if(typeof videoId !== undefined){
-        return videoId;
-      }
-    });
+    })
+  })
+}
 
-    if(result.length > 0){
-      resolve(createResponse(result));
-    }else{
-      reject("Sorry your file contained no valid youtube links");
-    }
+function getYoutubeVideoIds(hrefList){
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  return hrefList.map((href) => {
+    return href.match(regExp)[2];
+  }).filter((videoIds) => {
+    return videoIds.length === 11;
   });
-};
+}
 
-exports.readFile = function(path){
-  console.log("reading the file");
-  return new Promise((resolve, reject) => {
-    fs.readFile(path, 'utf8', function(err, contents) {
-      if(err){
-        reject(err);
-      }else{ 
-        resolve(contents);
-      }
-    });
-  });
-};
+
+function createPlaylistObject(playlistArrays) {
+  return playlistArrays.reduce((obj, arr, index) => {
+    obj['playlist' + (index + 1)] = {
+      vids : arr,
+      total : arr.length
+    };
+    return obj;
+  }, {})
+}
+
+function api(){
+  return processHrefsFromFile(__dirname + '/../data/lasttune.html').then((hrefList) => {
+    return getYoutubeVideoIds(containsYoutube(hrefList));
+  }).then((youtubeArray) => {
+    return _.chunk(youtubeArray, calculateMaxVidAmount(youtubeArray.length, 200))
+  }).then((playlistArrays) => {
+    return createPlaylistObject(playlistArrays);
+  }).catch((err) => {
+    console.log(err);
+  })
+}
+
+api().then((contents) => {
+  console.log(contents)
+})
